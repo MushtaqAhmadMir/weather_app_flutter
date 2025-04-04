@@ -31,20 +31,20 @@ class HomeCubit extends Cubit<HomeState> {
       double? lat = response?.latitude;
       double? lng = response?.longitude;
 
-      getWeatherReport("34.083656", "74.797371");
-      getWeatherReportForFiveDays("34.083656", "74.797371");
+      getWeatherReport(lat.toString(), lng.toString());
+      getWeatherReportForFiveDays(lat.toString(), lng.toString());
     } catch (e) {
       //handle error
       // Scaffold
     }
   }
 
-  void getWeatherReport(String lat, String lng, {String city = ""}) async {
+  void getWeatherReport(String lat, String lng) async {
     String apiKey = dotenv.env['OPEN_WATHER_API_KEY'] ?? '';
     emit(state.copyWith(weatherResource: DataResource.loading()));
     weatherUseCase.invoke(
       input: GetWeatherInput(
-        q: city,
+        q: state.city,
         lat: lat,
         lng: lng,
         appId: apiKey,
@@ -53,25 +53,27 @@ class HomeCubit extends Cubit<HomeState> {
       callback: (value) {
         emit(state.copyWith(weatherResource: value));
         if (value.isSuccess()) {}
-        if (value.isError()) {}
+        if (value.isError()) {
+          print(value.failure?.message);
+        }
       },
     );
   }
 
-  void getWeatherReportForFiveDays(
-    String lat,
-    String lng, {
-    String city = "",
-  }) async {
+  void getWeatherReportForFiveDays(String lat, String lng) async {
     String apiKey = dotenv.env['OPEN_WATHER_API_KEY'] ?? '';
     emit(state.copyWith(fiveDayWeatherResource: DataResource.loading()));
     weatherForFiveDaysUsecase.invoke(
-      input: GetWeatherInput(q: city, lat: lat, lng: lng, appId: apiKey),
+      input: GetWeatherInput(q: state.city, lat: lat, lng: lng, appId: apiKey),
       callback: (value) {
         emit(state.copyWith(fiveDayWeatherResource: value));
         if (value.isSuccess()) {}
         if (value.isError()) {}
       },
     );
+  }
+
+  void onChangeCity(String val) {
+    emit(state.copyWith(city: val));
   }
 }

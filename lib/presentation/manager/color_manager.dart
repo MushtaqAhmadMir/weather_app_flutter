@@ -5,10 +5,13 @@ class ColorManager {
 
   static const white = Color(0xFFFFFFFF);
   static const whiteSmoke = Color(0xFFF6F9F9);
+  static const gray = Colors.grey;
 
   static const aquaDeep50 = Color(0xFFF0FDF8);
   static const aquaDeep100 = Color(0xFFEEEEF0);
   static const aquaDeepNew100 = Color(0xFFCBFCEB);
+
+  static const bule900 = Colors.blue;
 
   static const aquaDeep200 = Color(0xFF98F7D9);
   static const aquaDeep500 = Color(0xFF12BA91);

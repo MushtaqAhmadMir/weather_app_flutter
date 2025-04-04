@@ -10,9 +10,8 @@ void main() async {
 }
 
 Future<void> initComponents() async {
-  await dotenv.load(); // Explicitly specify the file
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
-
   configureDependencyInjection();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 }

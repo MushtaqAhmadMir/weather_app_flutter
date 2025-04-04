@@ -21,11 +21,13 @@ mixin _$HomeState {
       throw _privateConstructorUsedError;
   DataResource<WeatherForFiveDaysModel> get fiveDayWeatherResource =>
       throw _privateConstructorUsedError;
+  String get city => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+      String city,
     )
     initial,
   }) => throw _privateConstructorUsedError;
@@ -34,6 +36,7 @@ mixin _$HomeState {
     TResult? Function(
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+      String city,
     )?
     initial,
   }) => throw _privateConstructorUsedError;
@@ -42,6 +45,7 @@ mixin _$HomeState {
     TResult Function(
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+      String city,
     )?
     initial,
     required TResult orElse(),
@@ -75,6 +79,7 @@ abstract class $HomeStateCopyWith<$Res> {
   $Res call({
     DataResource<WeatherReportModel> weatherResource,
     DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+    String city,
   });
 }
 
@@ -95,6 +100,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   $Res call({
     Object? weatherResource = null,
     Object? fiveDayWeatherResource = null,
+    Object? city = null,
   }) {
     return _then(
       _value.copyWith(
@@ -108,6 +114,11 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
                     ? _value.fiveDayWeatherResource
                     : fiveDayWeatherResource // ignore: cast_nullable_to_non_nullable
                         as DataResource<WeatherForFiveDaysModel>,
+            city:
+                null == city
+                    ? _value.city
+                    : city // ignore: cast_nullable_to_non_nullable
+                        as String,
           )
           as $Val,
     );
@@ -126,6 +137,7 @@ abstract class _$$InitialImplCopyWith<$Res>
   $Res call({
     DataResource<WeatherReportModel> weatherResource,
     DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+    String city,
   });
 }
 
@@ -145,6 +157,7 @@ class __$$InitialImplCopyWithImpl<$Res>
   $Res call({
     Object? weatherResource = null,
     Object? fiveDayWeatherResource = null,
+    Object? city = null,
   }) {
     return _then(
       _$InitialImpl(
@@ -158,6 +171,11 @@ class __$$InitialImplCopyWithImpl<$Res>
                 ? _value.fiveDayWeatherResource
                 : fiveDayWeatherResource // ignore: cast_nullable_to_non_nullable
                     as DataResource<WeatherForFiveDaysModel>,
+        city:
+            null == city
+                ? _value.city
+                : city // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
   }
@@ -169,6 +187,7 @@ class _$InitialImpl implements _Initial {
   const _$InitialImpl({
     this.weatherResource = const DataResource.initial(),
     this.fiveDayWeatherResource = const DataResource.initial(),
+    this.city = "",
   });
 
   @override
@@ -177,10 +196,13 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource;
+  @override
+  @JsonKey()
+  final String city;
 
   @override
   String toString() {
-    return 'HomeState.initial(weatherResource: $weatherResource, fiveDayWeatherResource: $fiveDayWeatherResource)';
+    return 'HomeState.initial(weatherResource: $weatherResource, fiveDayWeatherResource: $fiveDayWeatherResource, city: $city)';
   }
 
   @override
@@ -191,12 +213,13 @@ class _$InitialImpl implements _Initial {
             (identical(other.weatherResource, weatherResource) ||
                 other.weatherResource == weatherResource) &&
             (identical(other.fiveDayWeatherResource, fiveDayWeatherResource) ||
-                other.fiveDayWeatherResource == fiveDayWeatherResource));
+                other.fiveDayWeatherResource == fiveDayWeatherResource) &&
+            (identical(other.city, city) || other.city == city));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, weatherResource, fiveDayWeatherResource);
+      Object.hash(runtimeType, weatherResource, fiveDayWeatherResource, city);
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -212,10 +235,11 @@ class _$InitialImpl implements _Initial {
     required TResult Function(
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+      String city,
     )
     initial,
   }) {
-    return initial(weatherResource, fiveDayWeatherResource);
+    return initial(weatherResource, fiveDayWeatherResource, city);
   }
 
   @override
@@ -224,10 +248,11 @@ class _$InitialImpl implements _Initial {
     TResult? Function(
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+      String city,
     )?
     initial,
   }) {
-    return initial?.call(weatherResource, fiveDayWeatherResource);
+    return initial?.call(weatherResource, fiveDayWeatherResource, city);
   }
 
   @override
@@ -236,12 +261,13 @@ class _$InitialImpl implements _Initial {
     TResult Function(
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+      String city,
     )?
     initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(weatherResource, fiveDayWeatherResource);
+      return initial(weatherResource, fiveDayWeatherResource, city);
     }
     return orElse();
   }
@@ -279,12 +305,15 @@ abstract class _Initial implements HomeState {
   const factory _Initial({
     final DataResource<WeatherReportModel> weatherResource,
     final DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+    final String city,
   }) = _$InitialImpl;
 
   @override
   DataResource<WeatherReportModel> get weatherResource;
   @override
   DataResource<WeatherForFiveDaysModel> get fiveDayWeatherResource;
+  @override
+  String get city;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

@@ -7,5 +7,6 @@ class HomeState with _$HomeState {
     DataResource<WeatherReportModel> weatherResource,
     @Default(DataResource.initial())
     DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
+    @Default("") String city,
   }) = _Initial;
 }

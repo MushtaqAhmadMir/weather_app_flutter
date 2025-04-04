@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:weather_app_flutter/common/di/injection.dart';
 import 'package:weather_app_flutter/presentation/manager/style_manager.dart';
 import 'package:weather_app_flutter/presentation/screens/home/cubit/home_cubit.dart';
+import 'package:weather_app_flutter/presentation/screens/home/widgets/error_widget.dart';
 import 'package:weather_app_flutter/presentation/screens/home/widgets/forecast_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -25,38 +26,31 @@ class HomeScreen extends StatelessWidget {
           final String city = weather?.name ?? "";
           final String country = weather?.sys?.country ?? "";
 
-          return Container(
-            child: Scaffold(
-              backgroundColor: Colors.blue[900],
-              appBar: AppBar(
-                title: Text('$city, $country', style: StyleManager.headerOne()),
-                centerTitle: true,
-                backgroundColor: Colors.transparent,
-                elevation: 0,
+          return Scaffold(
+            backgroundColor: Colors.blue[900],
+            appBar: AppBar(
+              title: Text(
+                '${city.isEmpty ? "" : "$city,"} $country',
+                style: StyleManager.headerOne(),
               ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildSearchBar(context),
-                    Stack(
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.blue, Colors.indigo],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                          ),
-                        ),
-                        if (state.weatherResource.isLoading())
-                          loaderIndicator(),
-                        if (state.weatherResource.isSuccess())
-                          _weatherContent(state, context),
-                      ],
+              centerTitle: true,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildSearchBar(context),
+                  if (state.weatherResource.isLoading()) loaderIndicator(),
+                  if (state.weatherResource.isSuccess())
+                    _weatherContent(state, context),
+                  if (state.weatherResource.isError())
+                    ErrorScreen(
+                      onRetry: () {
+                        cubit.getPermission();
+                      },
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
           );
@@ -66,19 +60,18 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget loaderIndicator() {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CircularProgressIndicator(color: Colors.white),
-          const SizedBox(height: 12),
-          Text(
-            "Fetching Weather Data...",
-            style: StyleManager.bodyText().copyWith(color: Colors.white),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 200),
+        const CircularProgressIndicator(color: Colors.white),
+        const SizedBox(height: 12),
+        Text(
+          "Fetching Weather Data...",
+          style: StyleManager.bodyText().copyWith(color: Colors.white),
+        ),
+      ],
     );
   }
 
@@ -89,12 +82,17 @@ class HomeScreen extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              onChanged: cubit.onChangeCity,
               controller: cubit.cityController,
               style: const TextStyle(color: Colors.white),
+              cursorColor: Colors.white,
+              cursorHeight: 12,
               decoration: InputDecoration(
+                labelStyle: StyleManager.bodyText(),
                 hintText: "Enter city name",
-                hintStyle: const TextStyle(color: Colors.white70),
+                hintStyle: StyleManager.bodyText(),
                 filled: true,
+
                 fillColor: Colors.white.withValues(alpha: 0.2),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -111,21 +109,18 @@ class HomeScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               if (cubit.cityController.text.isNotEmpty) {
-                cubit.getWeatherReportForFiveDays(
-                  "",
-                  "",
-                  city: cubit.cityController.text,
-                );
-                cubit.getWeatherReport("", "", city: cubit.cityController.text);
+                cubit.getWeatherReportForFiveDays("", "");
+                cubit.getWeatherReport("", "");
               }
             },
             style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.all(15),
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Icon(Icons.search, color: Colors.blue),
+            child: const Icon(Icons.search, color: Colors.blue, size: 22),
           ),
         ],
       ),
@@ -147,8 +142,8 @@ class HomeScreen extends StatelessWidget {
     var weather = state.weatherResource.data;
     final double temp = (weather?.main?.temp ?? 273.15) - 273.15;
     final double feelsLike = (weather?.main?.feelsLike ?? 273.15) - 273.15;
-    final String condition = weather?.weather?.first.description ?? "N/A";
-    final String icon = weather?.weather?.first.icon ?? "01d";
+    final String condition = weather?.weather.first.description ?? "N/A";
+    final String icon = weather?.weather.first.icon ?? "01d";
     final int humidity = weather?.main?.humidity ?? 0;
     final double windSpeed = weather?.wind?.speed ?? 0;
     final int pressure = weather?.main?.pressure ?? 0;

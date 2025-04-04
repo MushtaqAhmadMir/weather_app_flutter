@@ -184,7 +184,7 @@ abstract class WeatherService {
 
 ## 🔐 .env Example
 ```
-API_KEY=your_api_key_here
+OPEN_WATHER_API_KEY=your_api_key_here
 BASE_URL=https://api.weatherapi.com/v1
 ```
 
