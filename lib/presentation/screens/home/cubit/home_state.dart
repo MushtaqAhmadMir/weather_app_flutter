@@ -8,5 +8,7 @@ class HomeState with _$HomeState {
     @Default(DataResource.initial())
     DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
     @Default("") String city,
+    @Default(false) bool isPermissionGiven,
+    @Default(null) Position? position,
   }) = _Initial;
 }

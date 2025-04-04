@@ -22,12 +22,16 @@ mixin _$HomeState {
   DataResource<WeatherForFiveDaysModel> get fiveDayWeatherResource =>
       throw _privateConstructorUsedError;
   String get city => throw _privateConstructorUsedError;
+  bool get isPermissionGiven => throw _privateConstructorUsedError;
+  Position? get position => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
       String city,
+      bool isPermissionGiven,
+      Position? position,
     )
     initial,
   }) => throw _privateConstructorUsedError;
@@ -37,6 +41,8 @@ mixin _$HomeState {
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
       String city,
+      bool isPermissionGiven,
+      Position? position,
     )?
     initial,
   }) => throw _privateConstructorUsedError;
@@ -46,6 +52,8 @@ mixin _$HomeState {
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
       String city,
+      bool isPermissionGiven,
+      Position? position,
     )?
     initial,
     required TResult orElse(),
@@ -80,6 +88,8 @@ abstract class $HomeStateCopyWith<$Res> {
     DataResource<WeatherReportModel> weatherResource,
     DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
     String city,
+    bool isPermissionGiven,
+    Position? position,
   });
 }
 
@@ -101,6 +111,8 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
     Object? weatherResource = null,
     Object? fiveDayWeatherResource = null,
     Object? city = null,
+    Object? isPermissionGiven = null,
+    Object? position = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -119,6 +131,16 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
                     ? _value.city
                     : city // ignore: cast_nullable_to_non_nullable
                         as String,
+            isPermissionGiven:
+                null == isPermissionGiven
+                    ? _value.isPermissionGiven
+                    : isPermissionGiven // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            position:
+                freezed == position
+                    ? _value.position
+                    : position // ignore: cast_nullable_to_non_nullable
+                        as Position?,
           )
           as $Val,
     );
@@ -138,6 +160,8 @@ abstract class _$$InitialImplCopyWith<$Res>
     DataResource<WeatherReportModel> weatherResource,
     DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
     String city,
+    bool isPermissionGiven,
+    Position? position,
   });
 }
 
@@ -158,6 +182,8 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? weatherResource = null,
     Object? fiveDayWeatherResource = null,
     Object? city = null,
+    Object? isPermissionGiven = null,
+    Object? position = freezed,
   }) {
     return _then(
       _$InitialImpl(
@@ -176,6 +202,16 @@ class __$$InitialImplCopyWithImpl<$Res>
                 ? _value.city
                 : city // ignore: cast_nullable_to_non_nullable
                     as String,
+        isPermissionGiven:
+            null == isPermissionGiven
+                ? _value.isPermissionGiven
+                : isPermissionGiven // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        position:
+            freezed == position
+                ? _value.position
+                : position // ignore: cast_nullable_to_non_nullable
+                    as Position?,
       ),
     );
   }
@@ -188,6 +224,8 @@ class _$InitialImpl implements _Initial {
     this.weatherResource = const DataResource.initial(),
     this.fiveDayWeatherResource = const DataResource.initial(),
     this.city = "",
+    this.isPermissionGiven = false,
+    this.position = null,
   });
 
   @override
@@ -199,10 +237,16 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final String city;
+  @override
+  @JsonKey()
+  final bool isPermissionGiven;
+  @override
+  @JsonKey()
+  final Position? position;
 
   @override
   String toString() {
-    return 'HomeState.initial(weatherResource: $weatherResource, fiveDayWeatherResource: $fiveDayWeatherResource, city: $city)';
+    return 'HomeState.initial(weatherResource: $weatherResource, fiveDayWeatherResource: $fiveDayWeatherResource, city: $city, isPermissionGiven: $isPermissionGiven, position: $position)';
   }
 
   @override
@@ -214,12 +258,21 @@ class _$InitialImpl implements _Initial {
                 other.weatherResource == weatherResource) &&
             (identical(other.fiveDayWeatherResource, fiveDayWeatherResource) ||
                 other.fiveDayWeatherResource == fiveDayWeatherResource) &&
-            (identical(other.city, city) || other.city == city));
+            (identical(other.city, city) || other.city == city) &&
+            (identical(other.isPermissionGiven, isPermissionGiven) ||
+                other.isPermissionGiven == isPermissionGiven) &&
+            const DeepCollectionEquality().equals(other.position, position));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, weatherResource, fiveDayWeatherResource, city);
+  int get hashCode => Object.hash(
+    runtimeType,
+    weatherResource,
+    fiveDayWeatherResource,
+    city,
+    isPermissionGiven,
+    const DeepCollectionEquality().hash(position),
+  );
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -236,10 +289,18 @@ class _$InitialImpl implements _Initial {
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
       String city,
+      bool isPermissionGiven,
+      Position? position,
     )
     initial,
   }) {
-    return initial(weatherResource, fiveDayWeatherResource, city);
+    return initial(
+      weatherResource,
+      fiveDayWeatherResource,
+      city,
+      isPermissionGiven,
+      position,
+    );
   }
 
   @override
@@ -249,10 +310,18 @@ class _$InitialImpl implements _Initial {
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
       String city,
+      bool isPermissionGiven,
+      Position? position,
     )?
     initial,
   }) {
-    return initial?.call(weatherResource, fiveDayWeatherResource, city);
+    return initial?.call(
+      weatherResource,
+      fiveDayWeatherResource,
+      city,
+      isPermissionGiven,
+      position,
+    );
   }
 
   @override
@@ -262,12 +331,20 @@ class _$InitialImpl implements _Initial {
       DataResource<WeatherReportModel> weatherResource,
       DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
       String city,
+      bool isPermissionGiven,
+      Position? position,
     )?
     initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(weatherResource, fiveDayWeatherResource, city);
+      return initial(
+        weatherResource,
+        fiveDayWeatherResource,
+        city,
+        isPermissionGiven,
+        position,
+      );
     }
     return orElse();
   }
@@ -306,6 +383,8 @@ abstract class _Initial implements HomeState {
     final DataResource<WeatherReportModel> weatherResource,
     final DataResource<WeatherForFiveDaysModel> fiveDayWeatherResource,
     final String city,
+    final bool isPermissionGiven,
+    final Position? position,
   }) = _$InitialImpl;
 
   @override
@@ -314,6 +393,10 @@ abstract class _Initial implements HomeState {
   DataResource<WeatherForFiveDaysModel> get fiveDayWeatherResource;
   @override
   String get city;
+  @override
+  bool get isPermissionGiven;
+  @override
+  Position? get position;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

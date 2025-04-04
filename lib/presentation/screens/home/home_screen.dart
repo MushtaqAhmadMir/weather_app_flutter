@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder, BlocProvider;
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app_flutter/common/di/injection.dart';
 import 'package:weather_app_flutter/presentation/manager/style_manager.dart';
@@ -18,8 +19,11 @@ class HomeScreen extends StatelessWidget {
       create: (context) => cubit,
       child: BlocBuilder<HomeCubit, HomeState>(
         buildWhen: (p, c) {
-          return p.fiveDayWeatherResource != c.fiveDayWeatherResource ||
-              p.weatherResource != c.weatherResource;
+          var c1 = p.fiveDayWeatherResource != c.fiveDayWeatherResource;
+          var c2 = p.weatherResource != c.weatherResource;
+          var c3 = p.isPermissionGiven != c.isPermissionGiven;
+          var c4 = p.position != c.position;
+          return c1 || c2 || c3 || c4;
         },
         builder: (context, state) {
           var weather = state.weatherResource.data;
@@ -38,25 +42,51 @@ class HomeScreen extends StatelessWidget {
               elevation: 0,
             ),
             body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildSearchBar(context),
-                  if (state.weatherResource.isLoading()) loaderIndicator(),
-                  if (state.weatherResource.isSuccess())
-                    _weatherContent(state, context),
-                  if (state.weatherResource.isError())
-                    ErrorScreen(
-                      onRetry: () {
-                        cubit.getPermission();
-                      },
-                    ),
-                ],
+              child: GestureDetector(
+                onPanUpdate: (details) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                child: Column(
+                  children: [
+                    _buildSearchBar(context),
+                    getCurrentScreenUI(state, context),
+                  ],
+                ),
               ),
             ),
           );
         },
       ),
     );
+  }
+
+  Widget getCurrentScreenUI(HomeState state, BuildContext context) {
+    if (state.weatherResource.isLoading() ||
+        state.fiveDayWeatherResource.isLoading()) {
+      return loaderIndicator();
+    } else if (state.weatherResource.isError()) {
+      return ErrorScreen(
+        isPermissionGiven: state.isPermissionGiven,
+        onRetry: () {
+          if (state.isPermissionGiven) {
+            cubit.fetchWeatherDetails();
+          } else {
+            cubit.getPermission(
+              callback: (value) {
+                if (value == null) {
+                  Geolocator.openAppSettings();
+                }
+              },
+            );
+          }
+        },
+      );
+    } else {
+      return _weatherContent(state, context);
+    }
   }
 
   Widget loaderIndicator() {
@@ -87,6 +117,9 @@ class HomeScreen extends StatelessWidget {
               style: const TextStyle(color: Colors.white),
               cursorColor: Colors.white,
               cursorHeight: 12,
+              onEditingComplete: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
               decoration: InputDecoration(
                 labelStyle: StyleManager.bodyText(),
                 hintText: "Enter city name",
@@ -108,9 +141,9 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(width: 10),
           ElevatedButton(
             onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               if (cubit.cityController.text.isNotEmpty) {
-                cubit.getWeatherReportForFiveDays("", "");
-                cubit.getWeatherReport("", "");
+                cubit.fetchWeatherDetails();
               }
             },
             style: ElevatedButton.styleFrom(

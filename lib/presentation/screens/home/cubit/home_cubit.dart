@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
+import 'package:weather_app_flutter/common/resource/data_failure.dart';
 import 'package:weather_app_flutter/common/resource/data_resource.dart';
 import 'package:weather_app_flutter/domain/resource/input/get_weather_input/get_weather_input.dart';
 import 'package:weather_app_flutter/domain/resource/model/weather_model.dart';
@@ -24,19 +26,44 @@ class HomeCubit extends Cubit<HomeState> {
   final GetWeatherUseCase weatherUseCase;
   final GetWeatherForFiveDaysUsecase weatherForFiveDaysUsecase;
 
-  Future<void> getPermission() async {
+  Future<void> getPermission({ValueChanged<Position?>? callback}) async {
     emit(state.copyWith(weatherResource: DataResource.loading()));
     try {
       var response = await LocationManager.determinePosition();
-      double? lat = response?.latitude;
-      double? lng = response?.longitude;
-
-      getWeatherReport(lat.toString(), lng.toString());
-      getWeatherReportForFiveDays(lat.toString(), lng.toString());
+      callback?.call(response);
+      if (response != null) {
+        emit(state.copyWith(isPermissionGiven: true, position: response));
+        fetchWeatherDetails();
+      } else {
+        emit(
+          state.copyWith(
+            isPermissionGiven: false,
+            weatherResource: DataResource.error(
+              DataFailure(500, "Permission Required", ""),
+            ),
+          ),
+        );
+      }
     } catch (e) {
-      //handle error
-      // Scaffold
+      emit(
+        state.copyWith(
+          weatherResource: DataResource.error(
+            DataFailure(500, "Permission Required", ""),
+          ),
+        ),
+      );
     }
+  }
+
+  void fetchWeatherDetails() {
+    getWeatherReport(
+      state.position?.latitude.toString() ?? "",
+      state.position?.longitude.toString() ?? "",
+    );
+    getWeatherReportForFiveDays(
+      state.position?.latitude.toString() ?? "",
+      state.position?.longitude.toString() ?? "",
+    );
   }
 
   void getWeatherReport(String lat, String lng) async {

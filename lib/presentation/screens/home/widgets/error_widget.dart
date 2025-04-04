@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:weather_app_flutter/presentation/manager/style_manager.dart';
 
 class ErrorScreen extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-
   const ErrorScreen({
-    Key? key,
+    super.key,
     this.message = "Something went wrong",
     required this.onRetry,
-  }) : super(key: key);
+    this.isPermissionGiven = false,
+  });
+
+  final String message;
+  final VoidCallback onRetry;
+  final bool isPermissionGiven;
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +25,17 @@ class ErrorScreen extends StatelessWidget {
             Icon(Icons.error_outline, color: Colors.redAccent, size: 64),
             const SizedBox(height: 16),
             Text(
-              message,
+              isPermissionGiven
+                  ? message
+                  : "App needs Location Permission to fetch current weather",
               textAlign: TextAlign.center,
               style: StyleManager.bodyText(),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
-              label: const Text("Retry"),
+              icon: Icon(isPermissionGiven ? Icons.refresh : Icons.location_on),
+              label: Text(isPermissionGiven ? "Retry" : "Grant Access"),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
