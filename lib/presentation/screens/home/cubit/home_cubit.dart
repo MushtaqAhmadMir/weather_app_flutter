@@ -52,9 +52,10 @@ class HomeCubit extends Cubit<HomeState> {
       ),
       callback: (value) {
         emit(state.copyWith(weatherResource: value));
-        if (value.isSuccess()) {}
+        if (value.isSuccess()) {} //for handling calculations or other stuff
         if (value.isError()) {
-          print(value.failure?.message);
+          //for to show toast message
+          debugPrint(value.failure?.message);
         }
       },
     );
@@ -67,13 +68,16 @@ class HomeCubit extends Cubit<HomeState> {
       input: GetWeatherInput(q: state.city, lat: lat, lng: lng, appId: apiKey),
       callback: (value) {
         emit(state.copyWith(fiveDayWeatherResource: value));
-        if (value.isSuccess()) {}
-        if (value.isError()) {}
+        if (value.isSuccess()) {} //for handling calculations or other stuff
+        if (value.isError()) {} //for to show toast message
       },
     );
   }
 
   void onChangeCity(String val) {
+    if (val.isEmpty) {
+      getPermission();
+    }
     emit(state.copyWith(city: val));
   }
 }
