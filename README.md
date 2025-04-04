@@ -177,8 +177,13 @@ abstract class WeatherService {
 
 ---
 
-## 🖼️ Screenshots
-> *(Add screenshots here when available)*
+## 📸 App Screenshot
+
+![Home Screen](assets/s1.png)
+![Home Screen with Search](assets/s2.png)
+![Map Screen](assets/s3.png)
+![Map Screen with bottomsheet](assets/s4.png)
+![Error Screen](assets/s5.png)
 
 ---
 
